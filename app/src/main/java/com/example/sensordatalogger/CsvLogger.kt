@@ -1,6 +1,7 @@
 package com.example.sensordatalogger
 
 import android.content.Context
+import android.os.Environment
 import android.util.Log
 import java.io.BufferedWriter
 import java.io.File
@@ -18,8 +19,8 @@ class CsvLogger(private val context: Context) {
 
     fun start(): File {
         val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
-        val base = context.getExternalFilesDir(null) ?: context.filesDir
-        val dir = File(base, "SensorLogs").apply { mkdirs() }
+        val dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            .also { it.mkdirs() }
         val newFile = File(dir, "sensor_data_$timestamp.csv")
         writer = BufferedWriter(FileWriter(newFile))
         writer?.write("timestamp_ns,accel_x,accel_y,accel_z,gyro_x,gyro_y,gyro_z\n")
